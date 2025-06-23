@@ -1,6 +1,10 @@
 import { IoPeopleOutline, IoSearchOutline, IoTrophyOutline, IoCalendarOutline } from 'react-icons/io5';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function HomePage() {
+  const { data: session, status } = useSession();
+
   return (
     <>
       <main className="container text-center py-4 py-lg-5">
@@ -10,12 +14,29 @@ export default function HomePage() {
         </div>
 
         <div className="auth-buttons" style={{ marginBottom: '3rem' }}>
-          <button className="cta-button">
-            Iniciar Sesión
-          </button>
-          <button className="cta-button secondary">
-            Registrarse
-          </button>
+          {status === 'loading' ? (
+            <p className="lead">Cargando...</p>
+          ) : session ? (
+            <>
+              {/* Botones para usuarios con sesión iniciada */}
+              <Link href="/teams/new" className="cta-button">
+                Crear mi Equipo
+              </Link>
+              <Link href="/teams" className="cta-button secondary">
+                Buscar Rivales
+              </Link>
+            </>
+          ) : (
+            <>
+              {/* Botones para visitantes */}
+              <Link href="/teams" className="cta-button">
+                Explorar Equipos
+              </Link>
+              <Link href="/auth/signup" className="cta-button secondary">
+                Crear Cuenta
+              </Link>
+            </>
+          )}
         </div>
 
         <div className="featuresSection">

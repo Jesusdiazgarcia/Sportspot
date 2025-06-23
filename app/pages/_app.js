@@ -1,13 +1,14 @@
 import { useState } from 'react';
+import { SessionProvider } from 'next-auth/react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/globals.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Modal from '../components/Modal';
-import { IoTrophyOutline, IoCalendarOutline } from 'react-icons/io5';
+import { IoCalendarOutline, IoPeopleOutline } from 'react-icons/io5';
 
 // This default export is required in a new `pages/_app.js` file.
-export default function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const [modalContent, setModalContent] = useState(null);
 
   const openModal = (content) => setModalContent(content);
@@ -16,19 +17,19 @@ export default function MyApp({ Component, pageProps }) {
   const getModalContent = () => {
     if (modalContent === 'tournaments') {
       return (
-        <div className="coming-soon-content">
-          <div className="coming-soon-icon"><IoTrophyOutline /></div>
-          <h1>Sección de Torneos en Desarrollo</h1>
-          <p>¡Muy pronto podrás crear y unirte a torneos para llevar a tu equipo a la gloria! Estamos trabajando en ello.</p>
+        <div className="modal-info-content">
+          <IoCalendarOutline className="icon" />
+          <h1>Torneos</h1>
+          <p>Estamos trabajando en una increíble sección de torneos. ¡Vuelve pronto!</p>
         </div>
       );
     }
     if (modalContent === 'friendly') {
       return (
-        <div className="coming-soon-content">
-          <div className="coming-soon-icon"><IoCalendarOutline /></div>
-          <h1>Sección de Amistosos en Desarrollo</h1>
-          <p>Pronto podrás organizar partidos amistosos. ¡Estamos finalizando los detalles!</p>
+        <div className="modal-info-content">
+          <IoPeopleOutline className="icon" />
+          <h1>Amistosos</h1>
+          <p>Encuentra partidos amistosos y nuevos oponentes. ¡Disponible muy pronto!</p>
         </div>
       );
     }
@@ -36,13 +37,15 @@ export default function MyApp({ Component, pageProps }) {
   };
 
   return (
-    <>
+    <SessionProvider session={session}>
       <Navbar onMenuClick={openModal} />
-      <Component {...pageProps} />
+      <main>
+        <Component {...pageProps} />
+      </main>
       <Footer />
       <Modal isOpen={!!modalContent} onClose={closeModal}>
         {getModalContent()}
       </Modal>
-    </>
+    </SessionProvider>
   );
 } 
