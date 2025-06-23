@@ -62,6 +62,16 @@ const Navbar = ({ onMenuClick }) => {
               </button>
               {dropdownOpen && (
                 <div className="user-dropdown-menu">
+                  <div className="user-dropdown-profile">
+                    <div className="user-dropdown-avatar">
+                      <IoPersonCircleOutline />
+                    </div>
+                    <div className="user-dropdown-info">
+                      <div className="user-dropdown-username">{session.user.username}</div>
+                      <div className="user-dropdown-email">{session.user.email}</div>
+                    </div>
+                  </div>
+                  <div className="user-dropdown-separator" />
                   <Link href="/profile" className="user-dropdown-item">Mi perfil</Link>
                   <button className="user-dropdown-item logout" onClick={handleSignOut}>Salir</button>
                 </div>
